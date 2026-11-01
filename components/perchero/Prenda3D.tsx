@@ -47,11 +47,15 @@ export function Prenda3D({ prenda, x, abierta }: Props) {
       uniformes,
       geometrias: crearGeometriasPrenda(imagen, ancho, ALTO_PRENDA),
       materiales: {
-        frente: crearMaterialTela({ map: texFrente, uniformes }),
-        // Sin foto de espalda: silueta del frente pintada con el color dominante.
-        espalda: texEspalda
-          ? crearMaterialTela({ map: texEspalda, uniformes })
-          : crearMaterialTela({ map: texFrente, uniformes, soloSilueta: true, color: colores[0] ?? "#777777" }),
+        frente: crearMaterialTela({ foto: texFrente, silueta: texFrente, uniformes }),
+        // La espalda usa la silueta del frente; sin foto de espalda, se pinta con el color dominante.
+        espalda: crearMaterialTela({
+          foto: texEspalda ?? null,
+          silueta: texFrente,
+          uniformes,
+          esEspalda: true,
+          relleno: colores[0] ?? "#777777",
+        }),
       },
     };
   }, [texturas, colores]);

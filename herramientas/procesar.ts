@@ -25,7 +25,7 @@ const RAIZ = path.resolve(__dirname, "..");
 const CRUDAS = path.join(RAIZ, "fotos-crudas");
 const SALIDA = path.join(RAIZ, "public", "prendas");
 const DATOS = path.join(RAIZ, "data", "prendas.json");
-const LADO_MAXIMO = 1024;
+const LADO_MAXIMO = 1600;
 const EXTENSIONES = [".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"];
 // Dónde están los archivos del modelo de IA (dentro de herramientas/node_modules).
 const MODELO = pathToFileURL(path.join(__dirname, "node_modules", "@imgly", "background-removal-node", "dist") + path.sep).href;
