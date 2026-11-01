@@ -130,11 +130,19 @@ async function limpiarYRecortar(png: Buffer): Promise<sharp.Sharp> {
   }
   const mayor = tamanios.indexOf(Math.max(...tamanios));
 
+  // Sacamos el gancho de metal de la foto (en 3D ya hay uno de latón): desde arriba,
+  // todas las filas que son apenas una línea finita (mucho más angostas que la percha).
+  const anchoFila = new Array<number>(h).fill(0);
+  for (let p = 0; p < w * h; p++) if (pieza[p] === mayor) anchoFila[Math.floor(p / w)]++;
+  const anchoMax = Math.max(...anchoFila);
+  let inicioPercha = 0;
+  while (inicioPercha < h && anchoFila[inicioPercha] < anchoMax * 0.06) inicioPercha++;
+
   let x0 = w, y0 = h, x1 = -1, y1 = -1;
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
       const p = y * w + x;
-      if (pieza[p] !== mayor) {
+      if (pieza[p] !== mayor || y < inicioPercha) {
         data[p * c + 3] = 0;
         continue;
       }
