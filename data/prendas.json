@@ -1,0 +1,69 @@
+[
+  {
+    "id": "ejemplo-eclipse-gira-97",
+    "nombre": "Eclipse — Gira 97",
+    "categoria": "remera",
+    "fotos": {
+      "frente": "/prendas/ejemplo-eclipse-gira-97/frente.webp",
+      "espalda": "/prendas/ejemplo-eclipse-gira-97/espalda.webp"
+    },
+    "colores": [
+      "#232225"
+    ],
+    "marca": "Sin marca",
+    "banda_o_tema": "Eclipse (banda inventada)",
+    "anio": 1997,
+    "anecdota": "Remera de ejemplo para probar el perchero. Borrala cuando cargues las tuyas.",
+    "tags": [
+      "ejemplo",
+      "banda",
+      "vintage"
+    ],
+    "agregada": "2026-10-31"
+  },
+  {
+    "id": "ejemplo-lunes-crema",
+    "nombre": "Lunes",
+    "categoria": "remera",
+    "fotos": {
+      "frente": "/prendas/ejemplo-lunes-crema/frente.webp",
+      "espalda": null
+    },
+    "colores": [
+      "#e3ddd0",
+      "#c6c1b5"
+    ],
+    "marca": "Básica",
+    "banda_o_tema": null,
+    "anio": null,
+    "anecdota": "Ejemplo sin foto de espalda: atrás se usa el color dominante.",
+    "tags": [
+      "ejemplo",
+      "basica",
+      "diaria"
+    ],
+    "agregada": "2026-10-31"
+  },
+  {
+    "id": "ejemplo-altura-oliva",
+    "nombre": "Altura 4810",
+    "categoria": "remera",
+    "fotos": {
+      "frente": "/prendas/ejemplo-altura-oliva/frente.webp",
+      "espalda": "/prendas/ejemplo-altura-oliva/espalda.webp"
+    },
+    "colores": [
+      "#5a6144"
+    ],
+    "marca": "Club de montaña",
+    "banda_o_tema": null,
+    "anio": 2021,
+    "anecdota": null,
+    "tags": [
+      "ejemplo",
+      "montaña",
+      "outdoor"
+    ],
+    "agregada": "2026-10-31"
+  }
+]

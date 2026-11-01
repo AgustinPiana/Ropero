@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/* Paleta del vestidor: negro cálido, latón y crema. Siempre oscuro. */
+:root {
+  --fondo: #0d0b09;
+  --superficie: #16130f;
+  --superficie-2: #1f1b16;
+  --borde: #2e2820;
+  --texto: #efe6d6;
+  --texto-suave: #a59c8c;
+  --laton: #c9a36a;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-fondo: var(--fondo);
+  --color-superficie: var(--superficie);
+  --color-superficie-2: var(--superficie-2);
+  --color-borde: var(--borde);
+  --color-texto: var(--texto);
+  --color-texto-suave: var(--texto-suave);
+  --color-laton: var(--laton);
+  --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-fraunces);
+}
+
+body {
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+::selection {
+  background: var(--laton);
+  color: var(--fondo);
+}
+
+:focus-visible {
+  outline: 2px solid var(--laton);
+  outline-offset: 3px;
+}
+
+/* Entrada del panel de ficha: sube en celular, entra por la derecha en pantallas anchas. */
+@keyframes panel-sube {
+  from { transform: translateY(40px); opacity: 0; }
+}
+@keyframes panel-entra {
+  from { transform: translateX(40px); opacity: 0; }
+}
+.panel-prenda {
+  animation: panel-sube 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@media (min-width: 640px) {
+  .panel-prenda {
+    animation-name: panel-entra;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel-prenda {
+    animation: none;
+  }
+}
