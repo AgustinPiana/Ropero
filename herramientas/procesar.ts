@@ -16,6 +16,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import sharp from "sharp";
+import heicConvert from "heic-convert";
 import { removeBackground } from "@imgly/background-removal-node";
 import { coloresDominantes } from "../scripts/lib/colores-dominantes";
 import { ListaPrendasSchema, type PrendaEntrada } from "../lib/schema";
@@ -25,7 +26,7 @@ const CRUDAS = path.join(RAIZ, "fotos-crudas");
 const SALIDA = path.join(RAIZ, "public", "prendas");
 const DATOS = path.join(RAIZ, "data", "prendas.json");
 const LADO_MAXIMO = 1024;
-const EXTENSIONES = [".jpg", ".jpeg", ".png", ".webp"];
+const EXTENSIONES = [".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"];
 // Dónde están los archivos del modelo de IA (dentro de herramientas/node_modules).
 const MODELO = pathToFileURL(path.join(__dirname, "node_modules", "@imgly", "background-removal-node", "dist") + path.sep).href;
 
@@ -71,10 +72,17 @@ async function fechaModificacion(f: string): Promise<number> {
   }
 }
 
+/** Abre la foto. Las HEIC del iPhone se convierten a JPG en memoria (el original no se toca). */
+async function abrir(archivo: string): Promise<string | Buffer> {
+  if (!/.hei[cf]$/i.test(archivo)) return archivo;
+  const jpg = await heicConvert({ buffer: await fs.readFile(archivo), format: "JPEG", quality: 0.95 });
+  return Buffer.from(jpg);
+}
+
 /** Quita el fondo y devuelve un PNG con transparencia. */
 async function quitarFondo(archivo: string): Promise<Buffer> {
   // Enderezar según la orientación de la cámara y achicar un poco: el modelo va más rápido.
-  const entrada = await sharp(archivo).rotate().resize(2000, 2000, { fit: "inside", withoutEnlargement: true }).png().toBuffer();
+  const entrada = await sharp(await abrir(archivo)).rotate().resize(2000, 2000, { fit: "inside", withoutEnlargement: true }).png().toBuffer();
   if (conFondo) return sharp(entrada).ensureAlpha().png().toBuffer();
   const blob = await removeBackground(new Blob([new Uint8Array(entrada)], { type: "image/png" }), {
     publicPath: MODELO,
@@ -88,13 +96,49 @@ async function quitarFondo(archivo: string): Promise<Buffer> {
 async function limpiarYRecortar(png: Buffer): Promise<sharp.Sharp> {
   const { data, info } = await sharp(png).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h, channels: c } = info;
+  for (let i = 3; i < data.length; i += c) {
+    const a = data[i];
+    data[i] = a < 90 ? 0 : a > 215 ? 255 : a;
+  }
+
+  // Nos quedamos solo con la pieza más grande (la remera, con su percha si la tiene):
+  // los restos sueltos (un gancho a medio borrar, una pelusa del fondo) se descartan.
+  const pieza = new Int32Array(w * h).fill(-1);
+  const tamanios: number[] = [];
+  const pila: number[] = [];
+  for (let p = 0; p < w * h; p++) {
+    if (pieza[p] !== -1 || data[p * c + 3] === 0) continue;
+    const id = tamanios.length;
+    let n = 0;
+    pieza[p] = id;
+    pila.push(p);
+    while (pila.length) {
+      const q = pila.pop()!;
+      n++;
+      const qx = q % w, qy = (q - qx) / w;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = qx + dx, ny = qy + dy;
+        if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+        const r = ny * w + nx;
+        if (pieza[r] === -1 && data[r * c + 3] > 0) {
+          pieza[r] = id;
+          pila.push(r);
+        }
+      }
+    }
+    tamanios.push(n);
+  }
+  const mayor = tamanios.indexOf(Math.max(...tamanios));
+
   let x0 = w, y0 = h, x1 = -1, y1 = -1;
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
-      const i = (y * w + x) * c + 3;
-      const a = data[i];
-      data[i] = a < 40 ? 0 : a > 215 ? 255 : a;
-      if (data[i] > 0) {
+      const p = y * w + x;
+      if (pieza[p] !== mayor) {
+        data[p * c + 3] = 0;
+        continue;
+      }
+      {
         if (x < x0) x0 = x;
         if (x > x1) x1 = x;
         if (y < y0) y0 = y;
@@ -137,17 +181,14 @@ async function main() {
     const dirCruda = path.join(CRUDAS, carpeta);
 
     let frente = await buscarFoto(dirCruda, ["frente", "front", "adelante"]);
-    const espalda = await buscarFoto(dirCruda, ["espalda", "back", "atras"]);
+    const espalda = await buscarFoto(dirCruda, ["espalda", "dorso", "back", "atras"]);
     if (!frente) {
       // Si hay una sola foto, la tomamos como frente.
       const fotos = (await fs.readdir(dirCruda)).filter((a) => EXTENSIONES.includes(path.extname(a).toLowerCase()));
       if (fotos.length === 1) frente = path.join(dirCruda, fotos[0]);
     }
     if (!frente) {
-      const heic = (await fs.readdir(dirCruda)).some((a) => /\.heic$/i.test(a));
-      console.log(rojo(`✗ ${carpeta}: `) + (heic
-        ? "las fotos son .HEIC (iPhone). Pasalas a JPG (en el iPhone: Ajustes › Cámara › Formatos › Más compatible)."
-        : "no encontré frente.jpg (ni .jpeg/.png/.webp)."));
+      console.log(rojo(`✗ ${carpeta}: `) + "no encontré la foto de frente (llamala frente.jpg; también vale .heic/.png/.webp).");
       errores++;
       continue;
     }

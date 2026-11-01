@@ -62,8 +62,13 @@ export function crearMaterialTela(opciones: {
       "#include <map_fragment>",
       /* glsl */ `
       #ifdef USE_MAP
-        vec4 texel = texture2D( map, vMapUv );
-        ${soloSilueta ? "diffuseColor.a *= texel.a;" : "diffuseColor *= texel;"}
+        ${
+          soloSilueta
+            ? // La espalda tiene la UV espejada; para recortar con la silueta del FRENTE
+              // hay que des-espejarla, si no en fotos asimétricas asoma un borde.
+              "vec4 texel = texture2D( map, vec2( 1.0 - vMapUv.x, vMapUv.y ) ); diffuseColor.a *= texel.a;"
+            : "vec4 texel = texture2D( map, vMapUv ); diffuseColor *= texel;"
+        }
       #endif
       if ( !gl_FrontFacing ) diffuseColor.rgb *= 0.4;
       `,

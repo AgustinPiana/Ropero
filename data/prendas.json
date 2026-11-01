@@ -1,69 +1,99 @@
 [
   {
-    "id": "ejemplo-eclipse-gira-97",
-    "nombre": "Eclipse — Gira 97",
+    "id": "adidas",
+    "nombre": "Adidas",
     "categoria": "remera",
     "fotos": {
-      "frente": "/prendas/ejemplo-eclipse-gira-97/frente.webp",
-      "espalda": "/prendas/ejemplo-eclipse-gira-97/espalda.webp"
-    },
-    "colores": [
-      "#232225"
-    ],
-    "marca": "Sin marca",
-    "banda_o_tema": "Eclipse (banda inventada)",
-    "anio": 1997,
-    "anecdota": "Remera de ejemplo para probar el perchero. Borrala cuando cargues las tuyas.",
-    "tags": [
-      "ejemplo",
-      "banda",
-      "vintage"
-    ],
-    "agregada": "2026-10-31"
-  },
-  {
-    "id": "ejemplo-lunes-crema",
-    "nombre": "Lunes",
-    "categoria": "remera",
-    "fotos": {
-      "frente": "/prendas/ejemplo-lunes-crema/frente.webp",
+      "frente": "/prendas/adidas/frente.webp",
       "espalda": null
     },
     "colores": [
-      "#e3ddd0",
-      "#c6c1b5"
+      "#656a71",
+      "#414449",
+      "#8492a7"
     ],
-    "marca": "Básica",
+    "marca": null,
     "banda_o_tema": null,
     "anio": null,
-    "anecdota": "Ejemplo sin foto de espalda: atrás se usa el color dominante.",
-    "tags": [
-      "ejemplo",
-      "basica",
-      "diaria"
-    ],
-    "agregada": "2026-10-31"
+    "anecdota": null,
+    "tags": [],
+    "agregada": "2026-11-01"
   },
   {
-    "id": "ejemplo-altura-oliva",
-    "nombre": "Altura 4810",
+    "id": "gaucho",
+    "nombre": "Gaucho",
     "categoria": "remera",
     "fotos": {
-      "frente": "/prendas/ejemplo-altura-oliva/frente.webp",
-      "espalda": "/prendas/ejemplo-altura-oliva/espalda.webp"
+      "frente": "/prendas/gaucho/frente.webp",
+      "espalda": "/prendas/gaucho/espalda.webp"
     },
     "colores": [
-      "#5a6144"
+      "#725541",
+      "#472c1a"
     ],
-    "marca": "Club de montaña",
+    "marca": null,
     "banda_o_tema": null,
-    "anio": 2021,
+    "anio": null,
     "anecdota": null,
-    "tags": [
-      "ejemplo",
-      "montaña",
-      "outdoor"
+    "tags": [],
+    "agregada": "2026-11-01"
+  },
+  {
+    "id": "vans-1",
+    "nombre": "Vans 1",
+    "categoria": "remera",
+    "fotos": {
+      "frente": "/prendas/vans-1/frente.webp",
+      "espalda": null
+    },
+    "colores": [
+      "#403e47",
+      "#5a5563",
+      "#28272e"
     ],
-    "agregada": "2026-10-31"
+    "marca": null,
+    "banda_o_tema": null,
+    "anio": null,
+    "anecdota": null,
+    "tags": [],
+    "agregada": "2026-11-01"
+  },
+  {
+    "id": "vans-2",
+    "nombre": "Vans 2",
+    "categoria": "remera",
+    "fotos": {
+      "frente": "/prendas/vans-2/frente.webp",
+      "espalda": null
+    },
+    "colores": [
+      "#877d74",
+      "#9f9a96",
+      "#6e645c"
+    ],
+    "marca": null,
+    "banda_o_tema": null,
+    "anio": null,
+    "anecdota": null,
+    "tags": [],
+    "agregada": "2026-11-01"
+  },
+  {
+    "id": "wrangler",
+    "nombre": "Wrangler",
+    "categoria": "remera",
+    "fotos": {
+      "frente": "/prendas/wrangler/frente.webp",
+      "espalda": "/prendas/wrangler/espalda.webp"
+    },
+    "colores": [
+      "#29272c"
+    ],
+    "marca": null,
+    "banda_o_tema": null,
+    "anio": null,
+    "anecdota": null,
+    "tags": [],
+    "agregada": "2026-11-01"
   }
 ]
